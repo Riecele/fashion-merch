@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StoreContext } from "./storeManager";
+import { connect } from "react-redux";
+import { updateProduct } from "../redux/slices/productsSlice";
 
 class UpdateProductForm extends Component {
-  static contextType = StoreContext;
 
   constructor(props) {
     super(props);
@@ -20,10 +20,10 @@ class UpdateProductForm extends Component {
   };
 
   handleUpdateProduct = () => {
-    const { updateProduct } = this.context;
+    const { updateProduct } = this.props;
     const { product, onClose } = this.props;
     const { name, description, quantity, price } = this.state; // Added price
-    updateProduct(product.id, name, description, quantity, price); // Added price
+    updateProduct({ id: product.id, name, description, quantity, price }); // Added price
     onClose();
   };
 
@@ -135,4 +135,8 @@ class UpdateProductForm extends Component {
   }
 }
 
-export default UpdateProductForm;
+const mapDispatchToProps = {
+  updateProduct,
+};
+
+export default connect(null, mapDispatchToProps)(UpdateProductForm);

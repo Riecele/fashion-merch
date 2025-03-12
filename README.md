@@ -16,15 +16,8 @@ A modern, responsive single-page application for fashion e-commerce with a seaml
 - **React.js** - UI component library
 - **Redux** - State management
 - **Redux Toolkit** - Simplified Redux development
-- **React Router** - Navigation management
 - **Styled Components** - CSS-in-JS styling
 
-### Backend
-- **Firebase** - Cloud database and backend services
-- **Firebase Authentication** - User management and authentication
-- **Firebase Firestore** - NoSQL document database
-- **Firebase Storage** - File storage for product images
-- **Firebase Cloud Functions** - Serverless backend logic
 
 ### DevOps & Tools
 - **Git/GitHub** - Version control
@@ -58,15 +51,6 @@ A modern, responsive single-page application for fashion e-commerce with a seaml
 │  │   Routes    │◄─┤   Logic     │◄─┤  Middleware │  │
 │  └─────────────┘  └─────────────┘  └─────────────┘  │
 └───────────────────────────┬─────────────────────────┘
-                            │ Database Operations
-                            ▼
-┌─────────────────────────────────────────────────────┐
-│                      DATABASE                       │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │
-│  │   Users     │  │  Products   │  │   Orders    │  │
-│  │ Collection  │  │ Collection  │  │ Collection  │  │
-│  └─────────────┘  └─────────────┘  └─────────────┘  │
-└─────────────────────────────────────────────────────┘
 ```
 
 ## Flowcharts

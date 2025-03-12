@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { StoreContext } from "./storeManager";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, increaseQuantity, decreaseQuantity } from "../redux/slices/cartSlice";
 
 const ProductCard = ({ product }) => {
-  const { cart, addToCart, increaseCartQuantity, decreaseCartQuantity } =
-    useContext(StoreContext);
-
-  const cartItem = cart.find((item) => item.id === product.id);
+  const dispatch = useDispatch();
+ const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartItem = cartItems.find((item) => item.id === product.id);
 
   const styles = {
     productCard: {
@@ -76,6 +76,18 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const handleAddToCart = () => {
+    if (!cartItem && product.quantity > 0) {
+      dispatch(addToCart(product));
+    }
+  };
+
+  const handleIncreaseQuantity = () => {
+    if (cartItem.quantity < product.quantity) {
+      dispatch(increaseQuantity(product.id));
+    }
+  };
+
   return (
     <React.Fragment>
       <div style={styles.productCard}>
@@ -93,14 +105,15 @@ const ProductCard = ({ product }) => {
               <div style={styles.quantityControls}>
                 <button
                   style={styles.quantityButton}
-                  onClick={() => decreaseCartQuantity(product.id)}
+                  onClick={() => dispatch(decreaseQuantity(product.id))}
                 >
                   -
                 </button>
                 <span style={styles.quantitySpan}>{cartItem.quantity}</span>
                 <button
                   style={styles.quantityButton}
-                  onClick={() => increaseCartQuantity(product.id)}
+                  onClick={handleIncreaseQuantity}
+                  disabled={cartItem.quantity > product.quantity}
                 >
                   +
                 </button>
@@ -108,7 +121,7 @@ const ProductCard = ({ product }) => {
             ) : (
               <button
                 style={styles.addToCart}
-                onClick={() => addToCart(product)}
+                onClick={handleAddToCart}
               >
                 Add to Cart
               </button>

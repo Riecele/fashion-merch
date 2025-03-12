@@ -1,16 +1,15 @@
 import React, { Component } from "react";
-import { StoreContext } from "./storeManager";
+import { connect } from "react-redux";
+import { addProduct } from "../redux/slices/productsSlice";
 
 class AddProductForm extends Component {
-  static contextType = StoreContext;
-
   constructor(props) {
     super(props);
     this.state = {
       name: "",
       description: "",
       quantity: 0,
-      price: 0, // Added price field
+      price: 0,
     };
   }
 
@@ -20,59 +19,59 @@ class AddProductForm extends Component {
   };
 
   handleAddProduct = () => {
-    const { addProduct } = this.context;
-    const { name, description, quantity, price } = this.state; // Added price
+    const { addProduct } = this.props;
+    const { name, description, quantity, price } = this.state;
     const { onClose } = this.props;
-    addProduct(name, description, quantity, price); // Added price
-    this.setState({ name: "", description: "", quantity: 0, price: 0 }); // Reset price
+    addProduct({ name, description, quantity, price });
+    this.setState({ name: "", description: "", quantity: 0, price: 0 });
     onClose();
   };
 
   render() {
     const { onClose } = this.props;
-    const { name, description, quantity, price } = this.state; // Added price
+    const { name, description, quantity, price } = this.state;
 
     const styles = {
       formContainer: {
-      padding: "20px",
-      width: "80%",
-      maxWidth: "400px",
-      backgroundColor: "rgba(255, 255, 255, 0.9)",
-      borderRadius: "8px",
-      boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-      position: "fixed",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      zIndex: 1001,
-      backdropFilter: "blur(30px)" 
+        padding: "20px",
+        width: "80%",
+        maxWidth: "400px",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        borderRadius: "8px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 1001,
+        backdropFilter: "blur(30px)"
       },
       input: {
-      display: "block",
-      width: "90%",
-      padding: "10px",
-      marginBottom: "10px",
-      borderRadius: "4px",
-      border: "1px solid #ccc"
+        display: "block",
+        width: "90%",
+        padding: "10px",
+        marginBottom: "10px",
+        borderRadius: "4px",
+        border: "1px solid #ccc"
       },
       button: {
-      padding: "10px 20px",
-      backgroundColor: "#007bff",
-      color: "#fff",
-      border: "none",
-      borderRadius: "4px",
-      cursor: "pointer",
-      marginRight: "10px"
+        padding: "10px 20px",
+        backgroundColor: "#007bff",
+        color: "#fff",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        marginRight: "10px"
       },
       backdrop: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-     backgroundColor: "rgba(0, 0, 0, 0.75)",
-      backdropFilter: "blur(10px)",
-      zIndex: 1000
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.75)",
+        backdropFilter: "blur(10px)",
+        zIndex: 1000
       }
     };
 
@@ -133,4 +132,8 @@ class AddProductForm extends Component {
   }
 }
 
-export default AddProductForm;
+const mapDispatchToProps = {
+  addProduct,
+};
+
+export default connect(null, mapDispatchToProps)(AddProductForm);

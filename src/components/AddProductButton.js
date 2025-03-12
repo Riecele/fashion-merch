@@ -6,11 +6,11 @@ class AddProductButton extends Component {
     super(props);
     this.state = {
       showForm: false
-    };
+    }
   }
 
   handleButtonClick = () => {
-    this.setState({ showForm: true });
+    this.setState({ showForm: true })
   };
 
   handleCloseForm = () => {
@@ -27,7 +27,7 @@ class AddProductButton extends Component {
         color: "#fff",
         border: "none",
         borderRadius: "4px",
-        cursor: "pointer",
+        cursor: "pointer",   
         marginBottom: "20px"
       }
     };

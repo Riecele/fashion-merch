@@ -22,7 +22,7 @@ class Header extends Component {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "1rem",
+        padding: "1px",
         backgroundColor: "#fff",
         color: "#333",
         position: "sticky",
@@ -65,7 +65,7 @@ class Header extends Component {
       <React.Fragment>
         <header style={styles.header}>
           <div style={styles.headerBrand}>
-            <h1>My E-Commerce</h1>
+            <h1>Shopee</h1>
             <FaBars
               style={styles.menuIcon}
               onClick={() => this.setState({ menuOpen: !menuOpen })}

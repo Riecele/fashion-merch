@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { StoreContext } from "./storeManager";
+import { connect } from "react-redux";
 import UpdateProductForm from "./UpdateProductForm";
 
 class UpdateProductButton extends Component {
-  static contextType = StoreContext;
-
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +19,7 @@ class UpdateProductButton extends Component {
   };
 
   render() {
-    const { products } = this.context;
+    const { products } = this.props;
     const { selectedProduct } = this.state;
 
     const styles = {
@@ -60,4 +58,8 @@ class UpdateProductButton extends Component {
   }
 }
 
-export default UpdateProductButton;
+const mapStateToProps = (state) => ({
+  products: state.products.productItems,
+});
+
+export default connect(mapStateToProps)(UpdateProductButton);

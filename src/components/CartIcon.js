@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import { FaShoppingCart } from "react-icons/fa";
-import { StoreContext } from "./storeManager";
 
 const CartIcon = ({ onClick }) => {
-  const { getTotalCartQuantity } = useContext(StoreContext);
-  const totalQuantity = getTotalCartQuantity();
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   const styles = {
     cartIcon: {
