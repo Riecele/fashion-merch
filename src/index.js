@@ -1,15 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './_components/layout/app';
-import { LoadingProvider } from './context/LoadingContext';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./components/App";
+import {StoreProvider} from "./components/storeManager"; 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+
 root.render(
-  <LoadingProvider>
-    <React.StrictMode>
-    <App />
+  <React.StrictMode>
+  <StoreProvider>
+   <App />
+   </StoreProvider>
   </React.StrictMode>
-  </LoadingProvider>
-
 );

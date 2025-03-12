@@ -1,75 +1,43 @@
 :root {
-  --primary: #8a2be2;
-  --primary-light: #9d4edd;
-  --accent: #00b4d8;
-  --background: #121212;
-  --surface: #1e1e1e;
-  --surface-light: #2a2a2a;
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --error: #cf6679;
-  --success: #03dac5;
-  --border-radius: 8px;
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --transition: 0.3s ease;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --bg-color: #ffffff;
+  --text-color: #5e5858;
+  --scrollbar-bg-color: #f1f1f1;
+  --scrollbar-thumb-color: #888;
+  --scrollbar-thumb-hover-color: #555;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: var(--background);
-  color: var(--text-primary);
-  line-height: 1.6;
+  margin: 0 10px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -ms-overflow-style: none;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-button {
-  background-color: var(--primary);
-  color: var(--text-primary);
-  border: none;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color var(--transition);
-}
-
-button:hover {
-  background-color: var(--primary-light);
-}
-
-.container {
-  maxWidth: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-}
-
-.card {
-  background-color: var(--surface);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: transform var(--transition);
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-html {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-/* WebKit and Chromium browsers (Chrome, Safari, newer Edge) */
+/* Style the scrollbar */
 ::-webkit-scrollbar {
-  display: none;
+  width: 12px;
 }
 
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 10px;
+  border: 3px solid var(--scrollbar-bg-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-bg-color);
+}
