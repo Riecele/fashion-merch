@@ -79,29 +79,22 @@ const AppContent = () => {
 
   const getUserRole = async (email) => {
     try {
-
       const usersCollectionRef = collection(db, "users");
-      const allUsersSnapshot = await getDocs(usersCollectionRef);
-      console.log("All users in the database:");
-      allUsersSnapshot.forEach((doc) => {
-        console.log(doc.id, "=>", doc.data());
-      });
-
-
       const q = query(usersCollectionRef, where("email", "==", email));
       const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        return querySnapshot.docs[0].data();
-      } else {
+  
+      if (querySnapshot.empty) {
         console.log("No user found with this email");
-        return { role: "customer" }; 
+        return null;  // Return null instead of a default object.
+      } else {
+        return querySnapshot.docs[0].data();
       }
     } catch (error) {
       console.error("Error fetching user role:", error);
-      return { role: "customer" }; 
+      return null;
     }
   };
+  
 
 
   useEffect(() => {
@@ -160,54 +153,86 @@ const AppContent = () => {
     setShowCart(false);
     setShowCheckout(true);
   };
-
   const handleLogin = async (email, password) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const userData = await getUserRole(email);
-
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (!userCredential) {
+        showNotificationMessage("No account record found. Please sign up.", "error");
+        return;
+      } 
+      // Use the email from Firebase Auth to ensure accuracy.
+      const userEmail = userCredential.user.email;
+      const userData = await getUserRole(userEmail);
+  
+      if (!userData) {
+        // If there's no corresponding Firestore record, sign out and alert the user.
+        await signOut(auth);
+        showNotificationMessage("No account record found. Please sign up.", "error");
+        return;
+      }
+  
       setUser({
         ...userCredential.user,
-        role: userData?.role || "customer"
+        role: userData.role || "customer"
       });
+      showNotificationMessage("Successfully signed in!");
     } catch (error) {
-      console.error(error);
-      alert("Login failed: " + error.message);
+      console.error("Login error:", error);
+      let errorMessage = "Login failed. Please try again.";
+      if (error.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (error.code === "auth/user-not-found") {
+        errorMessage = "No account found with this email.";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address.";
+      }
+      showNotificationMessage(errorMessage, "error");
     }
   };
-
+  
   const handleSignup = async (email, password, username) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
+      // Check if email already exists
+      const emailQuery = query(collection(db, "users"), where("email", "==", email));
+      const emailSnapshot = await getDocs(emailQuery);
+      if (!emailSnapshot.empty) {
+        throw new Error("An account with this email already exists.");
+      }
+  
+      // Check if username already exists
+      const usernameQuery = query(collection(db, "users"), where("displayName", "==", username));
+      const usernameSnapshot = await getDocs(usernameQuery);
+      if (!usernameSnapshot.empty) {
+        throw new Error("This username is already taken.");
+      }
+  
+      // Create the user account
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  
+      // Update the user profile with the username
       await updateProfile(userCredential.user, {
         displayName: username
       });
+  
+      // Save user data to Firestore
       await setDoc(doc(db, "users", email), {
         email: email,
         displayName: username,
         role: "customer",
         createdAt: new Date()
       });
+  
       setUser({
         ...userCredential.user,
         role: "customer"
       });
-      alert("Account created successfully!");
+  
+      showNotificationMessage(`Welcome, ${username}! Your account has been created.`);
     } catch (error) {
-      console.error(error);
-      alert("Signup failed: " + error.message);
+      showNotificationMessage(error.message || "Signup failed. Please try again.", "error");
     }
   };
-
+  
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -216,7 +241,7 @@ const AppContent = () => {
       console.error(error);
     }
   };
-
+  
   const handleOrderHistoryToggle = (value) => {
     console.log("Toggling order history to:", value);
     setOrderHistory(value);
@@ -258,7 +283,6 @@ const AppContent = () => {
       setShowLoginForm(false);
       setEmail("");
       setPassword("");
-      showNotificationMessage("Successfully signed in!");
     } catch (error) {
       showNotificationMessage(
         error.message || "Login failed. Please try again.",
@@ -278,9 +302,6 @@ const AppContent = () => {
       setEmail("");
       setPassword("");
       setUsername("");
-      showNotificationMessage(
-        `Welcome, ${username}! Your account has been created.`
-      );
     } catch (error) {
       console.error("Error during signup:", error);
       showNotificationMessage(
